@@ -16,18 +16,27 @@ import {
   useColorScheme,
 } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import Home from './pages/Home';
+import RouterWrapper from './routes/RouterWrapper';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      keepPreviousData: true,
+      staleTime: Infinity,
+    },
+  },
+});
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
     <QueryClientProvider client={queryClient}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.bg}>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <Home />
+        <RouterWrapper />
       </SafeAreaView>
     </QueryClientProvider>
   );
@@ -36,6 +45,7 @@ const App = () => {
 const styles = StyleSheet.create({
   bg: {
     backgroundColor: '#fff',
+    flex: 1,
   },
 });
 

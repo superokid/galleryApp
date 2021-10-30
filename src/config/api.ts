@@ -21,12 +21,22 @@ export const getArtWorks = async ({ search, page = 1 }: getArtWorksParams) => {
   });
 };
 
+export const getArtDetail = async (id: number) => {
+  return axios.get(`/v1/artworks/${id}`);
+};
+
 interface getArtWorksParams {
   search?: string;
   page?: number;
 }
 
 export type ArtWorksApi = AxiosResponse<ArtWorks>;
+export type ArtDetailApi = AxiosResponse<{
+  data: ArtWork;
+  config?: {
+    iiif_url: string;
+  };
+}>;
 
 export interface ArtWorks {
   data: ArtWork[];
@@ -49,4 +59,9 @@ export interface ArtWork {
     alt_text: string;
   };
   image_id: string;
+  inscriptions: string;
+  provenance_text: string;
+  publication_history: string;
+  exhibition_history: string;
+  credit_line: string;
 }

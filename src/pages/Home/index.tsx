@@ -12,21 +12,14 @@ import { useQuery } from 'react-query';
 import { getArtWorks, ArtWorksApi, ArtWork } from '../../config/api';
 import useDebounce from '../../utils/useDebounce';
 import { IMG_DEFAULT_URL } from '../../config/constants';
+import { HomeProps } from '../../routes/type';
 
-interface Props {}
-
-const Home = () => {
+const Home = ({ navigation }: HomeProps) => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce<string>(search, 500);
   const { data, isLoading, isError } = useQuery<ArtWorksApi>(
     ['getArtWorks', debouncedSearch],
     () => getArtWorks({ search }),
-    {
-      retry: false,
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      staleTime: Infinity,
-    },
   );
   if (isLoading) {
     return null;
@@ -37,7 +30,9 @@ const Home = () => {
 
   const renderItem = ({ item }: { item: ArtWork }) => {
     return (
-      <TouchableOpacity style={styles.imageBtn}>
+      <TouchableOpacity
+        style={styles.imageBtn}
+        onPress={() => navigation.push('ArtDetail', { id: item.id })}>
         <Image
           style={styles.image}
           source={{
@@ -74,9 +69,9 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
-  container: {},
   list: {
     height: '100%',
+    backgroundColor: '#fff',
   },
   imageBtn: {
     width: '33.33%',
