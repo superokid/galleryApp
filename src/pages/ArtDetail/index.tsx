@@ -44,6 +44,7 @@ const ArtDetail = ({ route }: ArtDetailProps) => {
         <TextSection
           title="Publication History"
           desc={apiData?.publication_history}
+          isHtmlContent
         />
         <TextSection
           title="Exhibition History"
@@ -65,5 +66,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 300,
+    marginBottom: 14,
   },
 });
