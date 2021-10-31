@@ -14,17 +14,7 @@ const TextSection = ({ title, desc, isHtmlContent }: Props) => {
   return (
     <View style={styles.section}>
       <Text type="title1">{title}</Text>
-      {isHtmlContent && desc ? (
-        <AutoHeightWebView
-          source={{
-            html:
-              `<div style="font-family: Sans-Serif; font-weight: 300;">${desc}</div>` ||
-              '',
-          }}
-        />
-      ) : (
-        <Text type="desc1">{desc || '-'}</Text>
-      )}
+      <Text type="desc1">{desc || '-'}</Text>
     </View>
   );
 };
