@@ -2,6 +2,7 @@ import React from 'react';
 import { useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FastImage from 'react-native-fast-image';
 
 import { ArtWork } from '../config/api';
 
@@ -45,6 +46,9 @@ const BookmarkStore: React.FC<Props> = ({ id, children }) => {
         // data not exist add
         const nextValue = [...bookmarks, apiData];
         setBookmark(nextValue);
+        if (!nextValue.length) {
+          FastImage.clearDiskCache();
+        }
       }
     },
   };

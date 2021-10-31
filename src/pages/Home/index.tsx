@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
   FlatList,
@@ -9,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useQuery } from 'react-query';
+import FastImage from 'react-native-fast-image';
 
 import { getArtWorks, ArtWorksApi, ArtWork } from '../../config/api';
 import useDebounce from '../../utils/useDebounce';
@@ -35,7 +35,7 @@ const Home = ({ navigation }: HomeProps) => {
       <TouchableOpacity
         style={styles.imageBtn}
         onPress={() => navigation.push('ArtDetail', { id: item.id })}>
-        <Image
+        <FastImage
           style={styles.image}
           source={{
             uri: `${data?.data?.config?.iiif_url || IMG_DEFAULT_URL}/${
