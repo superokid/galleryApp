@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axios from './axiosConfig';
+import { PAGE_LIMIT } from './constants';
 
 export const getArtWorks = async ({ search, page = 1 }: getArtWorksParams) => {
   if (search) {
@@ -7,7 +8,7 @@ export const getArtWorks = async ({ search, page = 1 }: getArtWorksParams) => {
       params: {
         q: search,
         page,
-        limit: 5,
+        limit: PAGE_LIMIT,
         fields: 'id,image_id',
       },
     });
@@ -15,7 +16,7 @@ export const getArtWorks = async ({ search, page = 1 }: getArtWorksParams) => {
   return axios.get('/v1/artworks', {
     params: {
       page,
-      limit: 5,
+      limit: PAGE_LIMIT,
       fields: 'id,image_id',
     },
   });

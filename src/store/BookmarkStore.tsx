@@ -1,5 +1,8 @@
 import React from 'react';
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { ArtWork } from '../config/api';
 
 interface Props {
@@ -13,12 +16,20 @@ interface InjectProps {
   onBookmark: (apiData?: ArtWork) => void;
 }
 
-const bookmarksAtom = atom<ArtWork[]>([]);
+const anyAsyncStorage = {
+  getItem: (key: string) =>
+    AsyncStorage.getItem(key).then(str => JSON.parse(str || '')),
+  setItem: (key: string, value: any) =>
+    AsyncStorage.setItem(key, JSON.stringify(value)),
+  delayInit: true,
+};
+
+const appSettingsAtom = atomWithStorage('bookmarks', [], anyAsyncStorage);
 
 const BookmarkStore: React.FC<Props> = ({ id, children }) => {
-  const [bookmarks, setBookmark] = useAtom(bookmarksAtom);
+  const [bookmarks, setBookmark] = useAtom(appSettingsAtom);
 
-  const isBookmarked = bookmarks.some(item => item.id === id);
+  const isBookmarked = bookmarks.some((item: ArtWork) => item.id === id);
 
   const injectProps = {
     isBookmarked,
@@ -28,10 +39,12 @@ const BookmarkStore: React.FC<Props> = ({ id, children }) => {
         return;
       }
       if (isBookmarked) {
-        setBookmark(bookmarks.filter(item => item.id !== id));
+        const nextValue = bookmarks.filter((item: ArtWork) => item.id !== id);
+        setBookmark(nextValue);
       } else {
         // data not exist add
-        setBookmark([...bookmarks, apiData]);
+        const nextValue = [...bookmarks, apiData];
+        setBookmark(nextValue);
       }
     },
   };
