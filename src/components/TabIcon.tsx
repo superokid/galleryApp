@@ -25,7 +25,7 @@ const TabIcon = ({ name, isActive }: Props) => {
   };
   return (
     <Image
-      style={{ width: 30, height: 30, opacity: isActive ? 1 : 0.8 }}
+      style={{ width: 30, height: 30, opacity: isActive ? 1 : 0.7 }}
       source={getImage()}
       resizeMode="contain"
     />

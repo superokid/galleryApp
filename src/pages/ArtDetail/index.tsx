@@ -5,15 +5,23 @@ import {
   Image,
   StyleSheet,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import { useQuery } from 'react-query';
 
-import { Text, BackHeader, Container, Spacing } from '../../components';
+import {
+  Text,
+  BackHeader,
+  Container,
+  Spacing,
+  ArtWorkImage,
+} from '../../components';
 import { ArtDetailProps } from '../../routes/type';
 import { getArtDetail, ArtDetailApi } from '../../config/api';
-import { IMG_DEFAULT_URL } from '../../config/constants';
 import TextSection from './TextSection';
 import ImgLove from '../../assets/icons/love-gray.png';
+import ImgLoveActive from '../../assets/icons/love-red.png';
+import BookmarkStore from '../../store/BookmarkStore';
 
 const ArtDetail = ({ route }: ArtDetailProps) => {
   const { id } = route.params;
@@ -31,16 +39,22 @@ const ArtDetail = ({ route }: ArtDetailProps) => {
         <ScrollView style={styles.content}>
           {isLoading && <ActivityIndicator />}
           {isError && <Text>error</Text>}
-          <Image
-            style={styles.image}
-            source={{
-              uri: `${data?.data?.config?.iiif_url || IMG_DEFAULT_URL}/${
-                apiData?.image_id
-              }/full/843,/0/default.jpg`,
-            }}
-            resizeMode="contain"
+          <ArtWorkImage
+            id={apiData?.image_id}
+            baseUrl={data?.data?.config?.iiif_url}
           />
-          <Image source={ImgLove} style={styles.icon} />
+          {!isLoading && (
+            <BookmarkStore id={id}>
+              {({ isBookmarked, onBookmark }) => (
+                <TouchableOpacity onPress={() => onBookmark(apiData)}>
+                  <Image
+                    source={isBookmarked ? ImgLoveActive : ImgLove}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
+              )}
+            </BookmarkStore>
+          )}
           <Spacing size={15} />
           <TextSection title="Credit" desc={apiData?.credit_line} />
           <TextSection title="Inscription" desc={apiData?.inscriptions} />

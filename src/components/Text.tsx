@@ -6,9 +6,16 @@ type Props = {
   type?: 'title1' | 'desc1';
   /** margin bottom */
   mb?: number;
+  addStyles?: any;
 } & TextProps;
 
-const CText: React.FC<Props> = ({ type, mb, children, ...props }) => {
+const CText: React.FC<Props> = ({
+  type,
+  mb,
+  children,
+  addStyles,
+  ...props
+}) => {
   return (
     <Text
       style={[
@@ -17,6 +24,7 @@ const CText: React.FC<Props> = ({ type, mb, children, ...props }) => {
           marginBottom: mb,
         },
         styles.base,
+        addStyles,
       ]}
       {...props}>
       {children}
