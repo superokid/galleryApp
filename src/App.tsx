@@ -9,12 +9,7 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  useColorScheme,
-} from 'react-native';
+import { StatusBar, useColorScheme } from 'react-native';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import RouterWrapper from './routes/RouterWrapper';
 
@@ -35,18 +30,9 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <SafeAreaView style={styles.bg}>
-        <RouterWrapper />
-      </SafeAreaView>
+      <RouterWrapper />
     </QueryClientProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  bg: {
-    backgroundColor: '#fff',
-    flex: 1,
-  },
-});
 
 export default App;

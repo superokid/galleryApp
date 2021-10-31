@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import { useQuery } from 'react-query';
 
@@ -13,6 +14,7 @@ import { getArtWorks, ArtWorksApi, ArtWork } from '../../config/api';
 import useDebounce from '../../utils/useDebounce';
 import { IMG_DEFAULT_URL } from '../../config/constants';
 import { HomeProps } from '../../routes/type';
+import Container from '../../components/Container';
 
 const Home = ({ navigation }: HomeProps) => {
   const [search, setSearch] = useState('');
@@ -22,7 +24,7 @@ const Home = ({ navigation }: HomeProps) => {
     () => getArtWorks({ search }),
   );
   if (isLoading) {
-    return null;
+    return <ActivityIndicator />;
   }
   if (isError) {
     return <Text>error</Text>;
@@ -47,22 +49,25 @@ const Home = ({ navigation }: HomeProps) => {
   };
 
   return (
-    <FlatList
-      style={styles.list}
-      data={data?.data?.data || []}
-      renderItem={renderItem}
-      keyExtractor={item => (item.id || '').toString()}
-      numColumns={3}
-      ListHeaderComponent={
-        <TextInput
-          style={styles.input}
-          onChangeText={setSearch}
-          value={search}
-          placeholder="Type your search here..."
-          placeholderTextColor="#888"
-        />
-      }
-    />
+    <Container>
+      <FlatList
+        style={styles.list}
+        data={data?.data?.data || []}
+        renderItem={renderItem}
+        keyExtractor={item => (item.id || '').toString()}
+        numColumns={3}
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <TextInput
+            style={styles.input}
+            onChangeText={setSearch}
+            value={search}
+            placeholder="Type your search here..."
+            placeholderTextColor="#888"
+          />
+        }
+      />
+    </Container>
   );
 };
 
@@ -82,6 +87,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   input: {
+    backgroundColor: '#fff',
     height: 40,
     margin: 12,
     borderWidth: 1,
